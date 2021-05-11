@@ -15,6 +15,20 @@ function ArchivoMayorMenorRutaEspecificada( [string] $ruta )
 	
 }
 
+#Primer requerimiento
+function ArchivoMenorHome
+{
+	$ruta = $env:HOME	
+	Write-Host "Home del usuario-> " $ruta	
+	#Exploracion del home	
+	$infoMenor = Get-ChildItem -Path $ruta -Recurse -Force -File | Select-Object -Property FullName,@{Name='SizeGB';Expression={$_.Length / 1GB}},@{Name='SizeMB';Expression={$_.Length / 1MB}},@{Name='SizeKB';Expression={$_.Length / 1KB}} | Sort-Object { $_.SizeKB } 
+	#Mostrar el archivo identificado en la ruta
+	Write-Host "Menor Archivo del home es " $infoMenor[0].FullName	
+	#Apertura de los archivos con la aplicacion asociada en el sistema
+	#Invoke-Item $infoMenor[0].FullName	
+	
+}
+
 function Show-Menu
 {
     param (
@@ -24,7 +38,7 @@ function Show-Menu
     Write-Host "================ $Title ================"
     
     Write-Host "1: Mayor y menor de ruta especificada"
-    Write-Host "2: Press '2' for this option."
+    Write-Host "2: Menor archivo del home del usuario actual"
     Write-Host "3: Press '3' for this option."
     Write-Host "Q: Press 'Q' to quit."
 }
@@ -51,6 +65,7 @@ if ($menu -eq -1){
 				 
 			 } '2' {
 				 'You chose option #2'
+				 ArchivoMenorHome
 			 } '3' {
 				 'You chose option #3'
 			 }
